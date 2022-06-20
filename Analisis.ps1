@@ -25,7 +25,7 @@ function GetZonaHoraria {
     Write-Info "1. a) Zona Horaria"
     Write-Before ("*****")
     Get-TimeZone
-    Write-After ("******")
+    Write-After ("*****")
 }
 
 function GetFechaHora {
@@ -33,7 +33,7 @@ function GetFechaHora {
     Write-Info "1. a) Fecha y Hora"
     Write-Before ("*****")
     get-date
-    Write-After ("******")
+    Write-After ("*****")
 }
 
 function GetActualizaciones {
@@ -49,7 +49,7 @@ function GetDireccionIP {
     Write-Info "1. c) Direcciones IP"
     Write-Before ("*****")
     Get-NetIPAddress | Format-Table
-    Write-After ("******")
+    Write-After ("*****")
 }
 
 function GetTarjetasRed {
@@ -57,7 +57,7 @@ function GetTarjetasRed {
     Write-Info "1. c) Tarjetas de Red"
     Write-Before ("*****")
     Get-NetAdapter | Format-Table
-    Write-After ("******")
+    Write-After ("*****")
 }
 
 function GetNombreEquipo {
@@ -73,7 +73,7 @@ function GetUsuarios {
     Write-Info "1. d) Usuarios"
     Write-Before ("*****")
     Get-LocalUser | Format-Table
-    Write-After ("******")
+    Write-After ("*****")
 }
 
 function GetDominio {
@@ -81,7 +81,7 @@ function GetDominio {
     Write-Info "1. e) Dominio"
     Write-Before ("*****")
     Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain
-    Write-After ("******")
+    Write-After ("*****")
 
 }
 
@@ -105,8 +105,8 @@ function GetSistemaArchivos {
     # Ver sistema de archivos
     Write-Info "4. a) Sistema de Archivos"
     Write-Before ("*****")
-    Get-Volume
-    Write-After ("******")
+    Get-Volume | Format-Table
+    Write-After ("*****")
 }
 
 
@@ -142,8 +142,32 @@ function GetProgramasInstalados {
     # Ver programas instalados
     Write-Info "4. b) Programas Instalados"
     Write-Before ("*****")
-    Get-WmiObject -Class Win32_Product | Select-Object -Property Name
-    Write-After ("******")
+    Get-WmiObject -Class Win32_Product | Select-Object -Property Name 
+    Write-After ("*****")
+}
+
+function GetSistemaOperativo {
+    # Ver sistema operativo
+    Write-Info "4. c) Sistema Operativo"
+    Write-Before ("*****")
+    (Get-CimInstance -ClassName CIM_OperatingSystem).Caption
+    Write-After ("*****")
+}
+
+function GetVersionSistemaOperativo {
+    # Ver version sistema operativo
+    Write-Info "4. c) Version Sistema Operativo"
+    Write-Before ("*****")
+    (Get-CimInstance -ClassName CIM_OperatingSystem).Version
+    Write-After ("*****")
+}
+
+function GetUltimoArranque {
+    # Ver ultimo arranque
+    Write-Info "4. c) Ultimo Arranque"
+    Write-Before ("*****")
+    (Get-CimInstance -ClassName CIM_OperatingSystem).LastBootUpTime
+    Write-After ("*****")
 }
 
 GetZonaHoraria
@@ -159,3 +183,6 @@ GetSubcategoriasAuditoria
 GetSistemaArchivos
 getCertificadoDRASystemEFS
 GetProgramasInstalados
+GetSistemaOperativo
+GetVersionSistemaOperativo
+GetUltimoArranque
