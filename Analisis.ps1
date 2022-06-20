@@ -72,13 +72,45 @@ function GetUsuarios {
     Write-After ("******")
 }
 
-function getDominio {
+function GetDominio {
     # Ver dominio
     Write-Info "1. e) Dominio"
     Write-Before ("*****")
     Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain
     Write-After ("******")
 
+}
+
+function GetCategoriasAuditoria {
+    # Ver categorias de auditoria
+    Write-Info "1. e) Categorias de Auditoria"
+    Write-Before ("*****")
+    auditpol /get /category:*
+    Write-After ("******")
+}
+
+function GetSubcategoriasAuditoria {
+    # Ver subcategorias de auditoria
+    Write-Info "1. e) Subcategorias de Auditoria"
+    Write-Before ("*****")
+    auditpol /list /subcategory:*
+    Write-After ("******")
+}
+
+function GetSistemaArchivos {
+    # Ver sistema de archivos
+    Write-Info "4. a) Sistema de Archivos"
+    Write-Before ("*****")
+    Get-Volume
+    Write-After ("******")
+}
+
+function GetProgramasInstalados {
+    # Ver programas instalados
+    Write-Info "4. b) Programas Instalados"
+    Write-Before ("*****")
+    Get-WmiObject -Class Win32_Product | Select-Object -Property Name
+    Write-After ("******")
 }
 
 GetZonaHoraria
@@ -89,3 +121,7 @@ GetTarjetasRed
 GetNombreEquipo
 GetUsuarios
 GetDominio
+GetCategoriasAuditoria
+GetSubcategoriasAuditoria
+GetSistemaArchivos
+GetProgramasInstalados
