@@ -17,23 +17,30 @@ function Write-After($text) {
 Write-Info "Analisis Forense para Auditoria de Sistemas"
 Write-Info "Script escrito y testeado por el grupo 1"
 
-function GetZonaHoraria
-{
-    #1 a) Ver zona horaria
+function GetZonaHoraria {
+    # Ver zona horaria
     Write-Info "1. a) Zona Horaria"
-	Write-Before ("*****")
+    Write-Before ("*****")
     Get-TimeZone
     Write-After ("******")
 }
 
-function GetActualizaciones
-{
-    #2 b) Ver actualizaciones
-    Write-Info "1. b) Actualizaciones"
+function GetFechaHora {
+    # Ver Fecha y Hora
+    Write-Info "1. a) Fecha y Hora"
     Write-Before ("*****")
     get-date
     Write-After ("******")
 }
 
+function GetActualizaciones {
+    # Ver actualizaciones
+    Write-Info "1. b) Actualizaciones"
+    Write-Before ("*****")
+    wmic qfe list
+    Write-After ("******")
+}
+
 GetZonaHoraria
+GetFechaHora
 GetActualizaciones
