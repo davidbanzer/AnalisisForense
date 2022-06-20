@@ -121,6 +121,22 @@ function GetSistemaOperativo {
     Write-After ("*****")
 }
 
+function GetVersionSistemaOperativo {
+    # Ver version sistema operativo
+    Write-Info "4. c) Version Sistema Operativo"
+    Write-Before ("*****")
+    (Get-CimInstance -ClassName CIM_OperatingSystem).Version
+    Write-After ("*****")
+}
+
+function GetUltimoArranque {
+    # Ver ultimo arranque
+    Write-Info "4. c) Ultimo Arranque"
+    Write-Before ("*****")
+    (Get-CimInstance -ClassName CIM_OperatingSystem).LastBootUpTime
+    Write-After ("*****")
+}
+
 GetZonaHoraria
 GetFechaHora
 GetActualizaciones
@@ -134,3 +150,5 @@ GetSubcategoriasAuditoria
 GetSistemaArchivos
 GetProgramasInstalados
 GetSistemaOperativo
+GetVersionSistemaOperativo
+GetUltimoArranque
