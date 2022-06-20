@@ -48,7 +48,44 @@ function GetDireccionIP {
     Write-After ("******")
 }
 
+function GetTarjetasRed {
+    # Ver adaptadores
+    Write-Info "1. c) Tarjetas de Red"
+    Write-Before ("*****")
+    Get-NetAdapter | Format-Table
+    Write-After ("******")
+}
+
+function GetNombreEquipo {
+    # Ver nombre equipo
+    Write-Info "1. d) Nombre del Equipo"
+    Write-Before ("*****")
+    hostname
+    Write-After ("******")
+}
+
+function GetUsuarios {
+    # Ver usuarios
+    Write-Info "1. d) Usuarios"
+    Write-Before ("*****")
+    Get-LocalUser | Format-Table
+    Write-After ("******")
+}
+
+function getDominio {
+    # Ver dominio
+    Write-Info "1. e) Dominio"
+    Write-Before ("*****")
+    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain
+    Write-After ("******")
+
+}
+
 GetZonaHoraria
 GetFechaHora
 GetActualizaciones
 GetDireccionIP
+GetTarjetasRed
+GetNombreEquipo
+GetUsuarios
+GetDominio
