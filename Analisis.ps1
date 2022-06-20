@@ -1,5 +1,4 @@
 
-$fc = $host.UI.RawUI.ForegroundColor
 $host.UI.RawUI.ForegroundColor = "white"
 
 function Write-Info($text) {
@@ -41,6 +40,15 @@ function GetActualizaciones {
     Write-After ("******")
 }
 
+function GetDireccionIP {
+    # Ver direccion
+    Write-Info "1. c) Direcciones IP"
+    Write-Before ("*****")
+    Get-NetIPAddress | Format-Table
+    Write-After ("******")
+}
+
 GetZonaHoraria
 GetFechaHora
 GetActualizaciones
+GetDireccionIP
