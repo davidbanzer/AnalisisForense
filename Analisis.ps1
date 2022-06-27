@@ -1,4 +1,6 @@
 
+$host.UI.RawUI.ForegroundColor = "white"
+
 function Write-Info($text) {
     Write-Host $text -ForegroundColor Yellow
 }
@@ -18,98 +20,89 @@ function Write-exclamation($text) {
 Write-Info "Analisis Forense para Auditoria de Sistemas"
 Write-Info "Script escrito y testeado por el grupo 1"
 
-function GetZonaHoraria {
+$FechaPath = "./Reportes Auditoria/Auditoria Fechas/"
+$FileNameFecha = "Auditoria Fechas.txt"
+function GetZonaHoraria { # [X] exportado a TXT
     # Ver zona horaria
-    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Date & Days')) {
-        New-Item -Path './Reportes Auditoria/Auditoria Date & Days' -ItemType Directory
+    if (-not (test-Path -Path $FechaPath)) {
+        New-Item -Path $FechaPath -ItemType Directory
     }
     
     Write-Info "Zona Horaria"
     Write-Before ("*****")
-    Get-TimeZone | Out-File -FilePath './Reportes Auditoria/Auditoria Date & Days/Config DATE & DAYS.txt'
+    Get-TimeZone | Out-File -FilePath $FechaPath $FileNameFecha
     Write-After ("*****")
 }
 
-function GetFechaHora {
+function GetFechaHora { # [X] exportado a TXT
     # Ver Fecha y Hora
     Write-Info "Fecha y Hora"
     Write-Before ("*****")
 
     $datetimeToString = (Get-Date -format "yyyy-MM-dd ss:mm:HH").ToString()
-    $datetimeToString | Out-File -Append './Reportes Auditoria/Auditoria Date & Days/Auditoria Date & Days.txt'
+    $datetimeToString | Out-File -Append $FechaPath $FileNameFecha
     Write-After ("*****")
 }
 
-function GetActualizaciones {
-    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Updates')) {
-        New-Item -Path './Reportes Auditoria/Auditoria Updates' -ItemType Directory
+$ActualizacionesPath = "./Reportes Auditoria/Auditoria Actualizaciónes"
+$FileNameActualizacion = "Auditoria Fechas.txt"
+function GetActualizaciones { # [X] exportado a TXT
+    if (-not (test-Path -Path $ActualizacionesPath)) {
+        New-Item -Path $ActualizacionesPath -ItemType Directory
     }
     # Ver actualizaciones
     Write-Info "Actualizaciones"
     Write-Before ("*****")
-    wmic qfe list | Out-File -FilePath './Reportes Auditoria/Auditoria Updates/Auditoria Updates.txt'
+    wmic qfe list | Out-File -FilePath $ActualizacionesPath $FileNameActualizacion
     Write-After ("******")
 }
 
-function GetDireccionIP {
-    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Redes & User')) {
-        New-Item -Path './Reportes Auditoria/Auditoria Redes & User' -ItemType Directory
+$RedesUsuariosPath = "./Reportes Auditoria/Auditoria Redes & Usuarios" 
+$FileNameRedesUsuarios = "Auditoria Redes & Usuarios.txt"
+function GetDireccionIP { # [X] exportado a TXT
+    if (-not (test-Path -Path $RedesUsuariosPath)) {
+        New-Item -Path $RedesUsuariosPath -ItemType Directory
     }
     # Ver direccion
     Write-Info "Direcciones IP"
     Write-Before ("*****")
-    Get-NetIPAddress | Format-Table | Out-File -FilePath './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
+    Get-NetIPAddress | Format-Table | Out-File -FilePath $RedesUsuariosPath $FileNameRedesUsuarios
     Write-After ("*****")
 }
 
-function GetTarjetasRed {
+$
+function GetTarjetasRed { # [X] exportado a TXT
     # Ver adaptadores
     Write-Info "Tarjetas de Red"
     Write-Before ("*****")
-    Get-NetAdapter | Format-Table | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
+    Get-NetAdapter | Format-Table | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
     Write-After ("*****")
 }
 
-function GetIPv6 {
-    Write-Info "Verificar si el protocolo IPv6 está habilitado"
-    Write-Before ("*****")
-    [System.Net.Sockets.Socket]::OSSupportsIPv6
-    Write-After ("*****")
-}
-
-function GetNombreEquipo {
+function GetNombreEquipo { # [X] exportado a TXT
     # Ver nombre equipo
     Write-Info "Nombre del Equipo"
     Write-Before ("*****")
-    hostname | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
+    hostname | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
     Write-After ("******")
 }
 
-function GetUsuarios {
+function GetUsuarios { # [X] exportado a TXT
     # Ver usuarios
     Write-Info "Usuarios"
     Write-Before ("*****")
-    Get-LocalUser | Format-Table | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
+    Get-LocalUser | Format-Table | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
     Write-After ("*****")
 }
 
-function GetDominio {
+function GetDominio { # [X] exportado a TXT
     # Ver dominio
     Write-Info "Dominio"
     Write-Before ("*****")
-    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
+    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
     Write-After ("*****")
 
 }
-
-function GetADDController {
-    # Ver la info del controlador de dominio
-    Write-Info "Controlador de Dominio"
-    Write-Before ("*****")
-    Get-AdDomainController
-    Write-After ("*****")
-}
-
 
 function GetCategoriasAuditoria {
     # Ver categorias de auditoria
@@ -136,7 +129,7 @@ function GetSistemaArchivos {
 }
 
 
-function configuracionEFS {
+function configuracinEFS {
     # TODO Falta corregir 1.- activacion de encryptacion 2.- asignacion de certificado DRA 
     Set-Location ./certificados_EFS
     cipher /r:EFSRA #Input usado para crear Pass PFX es auditoria
@@ -151,7 +144,7 @@ function getCertificadoDRASystemEFS {
     Write-Before ("*****")
 
     if (-not (test-Path -Path "./certificados_EFS/*")) {
-        configuracionEFS
+        configuracinEFS
     }
 
     Set-Location ./verificar_certificado_DRA_del_sistema_EFS
@@ -213,56 +206,14 @@ function GetLogError {
     Write-After ("*****")
 }
 
-function GetUnidadesDisco {
-    # Ver las unidades de disco
-    Write-Info "Unidades de Disco"
-    Write-Before ("*****")
-    Get-PSDrive -PSProvider FileSystem
-    Write-After ("*****")
-}
-
-function GetRecursosCompartidos {
-    # Ver los recursos compartidos
-    Write-Info "Recursos Compartidos"
-    Write-Before ("*****")
-    Get-SmbShare
-    Write-After ("*****")
-}
-
-function GetSMB1 {
-    # Comprobar si SMB1 está activo
-    Write-Info "SMB1"
-    Write-Before ("*****")
-    Get-WindowsOptionalFeature –Online –FeatureName SMB1Protocol
-    Write-After ("*****")
-}
-
-function GetUSBConectados {
-    # Comprobar los USB conectados
-    Write-Info "USB conectados"
-    Write-Before ("*****")
-    Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' }
-    Write-After ("*****")
-}
-
-function GetPoliticaContras {
-    # Comprobar la política de contraseñas
-    Write-Info "Política de Contraseñas"
-    Write-Before ("*****")
-    Get-ADDefaultDomainPasswordPolicy
-    Write-After ("*****")
-}
-
 GetZonaHoraria
 GetFechaHora
 GetActualizaciones
 GetDireccionIP
 GetTarjetasRed
-GetIPv6
 GetNombreEquipo
 GetUsuarios
 GetDominio
-GetADDController
 GetCategoriasAuditoria
 GetSubcategoriasAuditoria
 GetSistemaArchivos
@@ -273,7 +224,3 @@ GetVersionSistemaOperativo
 GetUltimoArranque
 GetLogSistema
 GetLogError
-GetUnidadesDisco
-GetSMB1
-GetUSBConectados
-GetPoliticaContras
