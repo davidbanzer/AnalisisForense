@@ -20,88 +20,112 @@ function Write-exclamation($text) {
 Write-Info "Analisis Forense para Auditoria de Sistemas"
 Write-Info "Script escrito y testeado por el grupo 1"
 
-$FechaPath = "./Reportes Auditoria/Auditoria Fechas/"
+$FechaPath = "./Reportes Auditoria/Auditoria Fechas"
 $FileNameFecha = "Auditoria Fechas.txt"
-function GetZonaHoraria { # [X] exportado a TXT
+function GetZonaHoraria {
+    # [X] exportado a TXT
     # Ver zona horaria
     if (-not (test-Path -Path $FechaPath)) {
         New-Item -Path $FechaPath -ItemType Directory
     }
-    
     Write-Info "Zona Horaria"
-    Write-Before ("*****")
-    Get-TimeZone | Out-File -FilePath $FechaPath $FileNameFecha
-    Write-After ("*****")
+    Write-Output 'Zona Horaria' | Out-File -FilePath $FechaPath/$FileNameFecha
+    Write-Output '------------' | Out-File -Append $FechaPath/$FileNameFecha
+    Get-TimeZone | Out-File -Append $FechaPath/$FileNameFecha
+    Write-Output '-------------------------------------------------------' | Out-File -Append $FechaPath/$FileNameFecha
+    Write-After ("TXT " + $FileNameFecha + " Generado.")
 }
 
-function GetFechaHora { # [X] exportado a TXT
+function GetFechaHora {
+    # [X] exportado a TXT
     # Ver Fecha y Hora
     Write-Info "Fecha y Hora"
-    Write-Before ("*****")
 
+    Write-Output 'Fecha y Hora' | Out-File -Append $FechaPath/$FileNameFecha
+    Write-Output '------------' | Out-File -Append $FechaPath/$FileNameFecha
     $datetimeToString = (Get-Date -format "yyyy-MM-dd ss:mm:HH").ToString()
-    $datetimeToString | Out-File -Append $FechaPath $FileNameFecha
-    Write-After ("*****")
+    $datetimeToString | Out-File -Append $FechaPath/$FileNameFecha
+    Write-Output '-------------------------------------------------------' | Out-File -Append $FechaPath/$FileNameFecha
+
+    Write-After ("TXT de " + $FileNameFecha + " Actualizado.")
 }
 
-$ActualizacionesPath = "./Reportes Auditoria/Auditoria Actualizaciónes"
+$ActualizacionesPath = "./Reportes Auditoria/Auditoria Actualizaciones"
 $FileNameActualizacion = "Auditoria Fechas.txt"
-function GetActualizaciones { # [X] exportado a TXT
+function GetActualizaciones {
+    # [X] exportado a TXT
     if (-not (test-Path -Path $ActualizacionesPath)) {
         New-Item -Path $ActualizacionesPath -ItemType Directory
     }
     # Ver actualizaciones
     Write-Info "Actualizaciones"
-    Write-Before ("*****")
-    wmic qfe list | Out-File -FilePath $ActualizacionesPath $FileNameActualizacion
-    Write-After ("******")
+    Write-Output 'Actualizaciones' | Out-File -FilePath $ActualizacionesPath/$FileNameActualizacion
+    Write-Output '------------' | Out-File -Append $ActualizacionesPath/$FileNameActualizacion
+    wmic qfe list | Out-File -Append $ActualizacionesPath/$FileNameActualizacion
+    Write-After ("TXT de " + $FileNameActualizacion + "  Generado.")
 }
 
 $RedesUsuariosPath = "./Reportes Auditoria/Auditoria Redes & Usuarios" 
 $FileNameRedesUsuarios = "Auditoria Redes & Usuarios.txt"
-function GetDireccionIP { # [X] exportado a TXT
+function GetDireccionIP {
+    # [X] exportado a TXT
     if (-not (test-Path -Path $RedesUsuariosPath)) {
         New-Item -Path $RedesUsuariosPath -ItemType Directory
     }
     # Ver direccion
     Write-Info "Direcciones IP"
-    Write-Before ("*****")
-    Get-NetIPAddress | Format-Table | Out-File -FilePath $RedesUsuariosPath $FileNameRedesUsuarios
-    Write-After ("*****")
+    Write-Output 'Direcciones IP' | Out-File -FilePath $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-NetIPAddress | Format-Table | Out-File -FilePath $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Generado.")
 }
 
-$
-function GetTarjetasRed { # [X] exportado a TXT
+function GetTarjetasRed {
+    # [X] exportado a TXT
     # Ver adaptadores
     Write-Info "Tarjetas de Red"
-    Write-Before ("*****")
-    Get-NetAdapter | Format-Table | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
-    Write-After ("*****")
+    Write-Output 'Tarjetas de Red' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-NetAdapter | Format-Table | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
+
 }
 
-function GetNombreEquipo { # [X] exportado a TXT
+function GetNombreEquipo {
+    # [X] exportado a TXT
     # Ver nombre equipo
     Write-Info "Nombre del Equipo"
-    Write-Before ("*****")
-    hostname | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
-    Write-After ("******")
+    Write-Output 'Nombre del Equipo' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    hostname | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
+
 }
 
-function GetUsuarios { # [X] exportado a TXT
+function GetUsuarios {
+    # [X] exportado a TXT
     # Ver usuarios
     Write-Info "Usuarios"
-    Write-Before ("*****")
-    Get-LocalUser | Format-Table | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
-    Write-After ("*****")
+    Write-Output 'Usuarios' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-LocalUser | Format-Table | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
+
 }
 
-function GetDominio { # [X] exportado a TXT
+function GetDominio {
+    # [X] exportado a TXT
     # Ver dominio
     Write-Info "Dominio"
-    Write-Before ("*****")
-    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain | Out-File -Append $RedesUsuariosPath $FileNameRedesUsuarios
-    Write-After ("*****")
-
+    Write-Output 'Dominio' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
 }
 
 function GetCategoriasAuditoria {
