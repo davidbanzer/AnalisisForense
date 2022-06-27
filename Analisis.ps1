@@ -121,7 +121,7 @@ function configuracinEFS {
 }
 
 function getCertificadoDRASystemEFS {
-    Write-Info "4. b) Verificar el sistema de cifrado de archivos y carpetas (EFS)."
+    Write-Info "Verificar el sistema de cifrado de archivos y carpetas (EFS)."
     Write-Before ("*****")
 
     if (-not (test-Path -Path "./certificados_EFS/*")) {
@@ -148,7 +148,7 @@ function GetProgramasInstalados {
 
 function GetSistemaOperativo {
     # Ver sistema operativo
-    Write-Info " Operativo"
+    Write-Info "Nombre del Sistema Operativo"
     Write-Before ("*****")
     (Get-CimInstance -ClassName CIM_OperatingSystem).Caption
     Write-After ("*****")
@@ -189,7 +189,7 @@ GetDominio
 GetCategoriasAuditoria
 GetSubcategoriasAuditoria
 GetSistemaArchivos
-getCertificadoDRASystemEFS
+#getCertificadoDRASystemEFS
 GetProgramasInstalados
 GetSistemaOperativo
 GetVersionSistemaOperativo
