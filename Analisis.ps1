@@ -1,6 +1,4 @@
 
-$host.UI.RawUI.ForegroundColor = "white"
-
 function Write-Info($text) {
     Write-Host $text -ForegroundColor Yellow
 }
@@ -72,6 +70,13 @@ function GetTarjetasRed {
     Write-After ("*****")
 }
 
+function GetIPv6 {
+    Write-Info "Verificar si el protocolo IPv6 está habilitado"
+    Write-Before ("*****")
+    [System.Net.Sockets.Socket]::OSSupportsIPv6
+    Write-After ("*****")
+}
+
 function GetNombreEquipo {
     # Ver nombre equipo
     Write-Info "Nombre del Equipo"
@@ -122,7 +127,7 @@ function GetSistemaArchivos {
 }
 
 
-function configuracinEFS {
+function configuracionEFS {
     # TODO Falta corregir 1.- activacion de encryptacion 2.- asignacion de certificado DRA 
     Set-Location ./certificados_EFS
     cipher /r:EFSRA #Input usado para crear Pass PFX es auditoria
@@ -137,7 +142,7 @@ function getCertificadoDRASystemEFS {
     Write-Before ("*****")
 
     if (-not (test-Path -Path "./certificados_EFS/*")) {
-        configuracinEFS
+        configuracionEFS
     }
 
     Set-Location ./verificar_certificado_DRA_del_sistema_EFS
@@ -204,6 +209,7 @@ GetFechaHora
 GetActualizaciones
 GetDireccionIP
 GetTarjetasRed
+GetIPv6
 GetNombreEquipo
 GetUsuarios
 GetDominio
