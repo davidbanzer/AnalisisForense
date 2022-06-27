@@ -1,4 +1,6 @@
 
+$host.UI.RawUI.ForegroundColor = "white"
+
 function Write-Info($text) {
     Write-Host $text -ForegroundColor Yellow
 }
@@ -18,98 +20,113 @@ function Write-exclamation($text) {
 Write-Info "Analisis Forense para Auditoria de Sistemas"
 Write-Info "Script escrito y testeado por el grupo 1"
 
+$FechaPath = "./Reportes Auditoria/Auditoria Fechas"
+$FileNameFecha = "Auditoria Fechas.txt"
 function GetZonaHoraria {
+    # [X] exportado a TXT
     # Ver zona horaria
-    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Date & Days')) {
-        New-Item -Path './Reportes Auditoria/Auditoria Date & Days' -ItemType Directory
+    if (-not (test-Path -Path $FechaPath)) {
+        New-Item -Path $FechaPath -ItemType Directory
     }
-    
     Write-Info "Zona Horaria"
-    Write-Before ("*****")
-    Get-TimeZone | Out-File -FilePath './Reportes Auditoria/Auditoria Date & Days/Config DATE & DAYS.txt'
-    Write-After ("*****")
+    Write-Output 'Zona Horaria' | Out-File -FilePath $FechaPath/$FileNameFecha
+    Write-Output '------------' | Out-File -Append $FechaPath/$FileNameFecha
+    Get-TimeZone | Out-File -Append $FechaPath/$FileNameFecha
+    Write-Output '-------------------------------------------------------' | Out-File -Append $FechaPath/$FileNameFecha
+    Write-After ("TXT " + $FileNameFecha + " Generado.")
 }
 
 function GetFechaHora {
+    # [X] exportado a TXT
     # Ver Fecha y Hora
     Write-Info "Fecha y Hora"
-    Write-Before ("*****")
 
+    Write-Output 'Fecha y Hora' | Out-File -Append $FechaPath/$FileNameFecha
+    Write-Output '------------' | Out-File -Append $FechaPath/$FileNameFecha
     $datetimeToString = (Get-Date -format "yyyy-MM-dd ss:mm:HH").ToString()
-    $datetimeToString | Out-File -Append './Reportes Auditoria/Auditoria Date & Days/Auditoria Date & Days.txt'
-    Write-After ("*****")
+    $datetimeToString | Out-File -Append $FechaPath/$FileNameFecha
+    Write-Output '-------------------------------------------------------' | Out-File -Append $FechaPath/$FileNameFecha
+
+    Write-After ("TXT de " + $FileNameFecha + " Actualizado.")
 }
 
+$ActualizacionesPath = "./Reportes Auditoria/Auditoria Actualizaciones"
+$FileNameActualizacion = "Auditoria Fechas.txt"
 function GetActualizaciones {
-    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Updates')) {
-        New-Item -Path './Reportes Auditoria/Auditoria Updates' -ItemType Directory
+    # [X] exportado a TXT
+    if (-not (test-Path -Path $ActualizacionesPath)) {
+        New-Item -Path $ActualizacionesPath -ItemType Directory
     }
     # Ver actualizaciones
     Write-Info "Actualizaciones"
-    Write-Before ("*****")
-    wmic qfe list | Out-File -FilePath './Reportes Auditoria/Auditoria Updates/Auditoria Updates.txt'
-    Write-After ("******")
+    Write-Output 'Actualizaciones' | Out-File -FilePath $ActualizacionesPath/$FileNameActualizacion
+    Write-Output '------------' | Out-File -Append $ActualizacionesPath/$FileNameActualizacion
+    wmic qfe list | Out-File -Append $ActualizacionesPath/$FileNameActualizacion
+    Write-After ("TXT de " + $FileNameActualizacion + "  Generado.")
 }
 
+$RedesUsuariosPath = "./Reportes Auditoria/Auditoria Redes & Usuarios" 
+$FileNameRedesUsuarios = "Auditoria Redes & Usuarios.txt"
 function GetDireccionIP {
-    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Redes & User')) {
-        New-Item -Path './Reportes Auditoria/Auditoria Redes & User' -ItemType Directory
+    # [X] exportado a TXT
+    if (-not (test-Path -Path $RedesUsuariosPath)) {
+        New-Item -Path $RedesUsuariosPath -ItemType Directory
     }
     # Ver direccion
     Write-Info "Direcciones IP"
-    Write-Before ("*****")
-    Get-NetIPAddress | Format-Table | Out-File -FilePath './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
-    Write-After ("*****")
+    Write-Output 'Direcciones IP' | Out-File -FilePath $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-NetIPAddress | Format-Table | Out-File -FilePath $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Generado.")
 }
 
 function GetTarjetasRed {
+    # [X] exportado a TXT
     # Ver adaptadores
     Write-Info "Tarjetas de Red"
-    Write-Before ("*****")
-    Get-NetAdapter | Format-Table | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
-    Write-After ("*****")
-}
+    Write-Output 'Tarjetas de Red' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-NetAdapter | Format-Table | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
 
-function GetIPv6 {
-    Write-Info "Verificar si el protocolo IPv6 está habilitado"
-    Write-Before ("*****")
-    [System.Net.Sockets.Socket]::OSSupportsIPv6
-    Write-After ("*****")
 }
 
 function GetNombreEquipo {
+    # [X] exportado a TXT
     # Ver nombre equipo
     Write-Info "Nombre del Equipo"
-    Write-Before ("*****")
-    hostname | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
-    Write-After ("******")
+    Write-Output 'Nombre del Equipo' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    hostname | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
+
 }
 
 function GetUsuarios {
+    # [X] exportado a TXT
     # Ver usuarios
     Write-Info "Usuarios"
-    Write-Before ("*****")
-    Get-LocalUser | Format-Table | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
-    Write-After ("*****")
+    Write-Output 'Usuarios' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-LocalUser | Format-Table | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
+
 }
 
 function GetDominio {
+    # [X] exportado a TXT
     # Ver dominio
     Write-Info "Dominio"
-    Write-Before ("*****")
-    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
-    Write-After ("*****")
-
+    Write-Output 'Dominio' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-Output '-------------------------------------------------------' | Out-File -Append $RedesUsuariosPath/$FileNameRedesUsuarios
+    Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
 }
-
-function GetADDController {
-    # Ver la info del controlador de dominio
-    Write-Info "Controlador de Dominio"
-    Write-Before ("*****")
-    Get-AdDomainController
-    Write-After ("*****")
-}
-
 
 function GetCategoriasAuditoria {
     # Ver categorias de auditoria
@@ -136,7 +153,7 @@ function GetSistemaArchivos {
 }
 
 
-function configuracionEFS {
+function configuracinEFS {
     # TODO Falta corregir 1.- activacion de encryptacion 2.- asignacion de certificado DRA 
     Set-Location ./certificados_EFS
     cipher /r:EFSRA #Input usado para crear Pass PFX es auditoria
@@ -151,7 +168,7 @@ function getCertificadoDRASystemEFS {
     Write-Before ("*****")
 
     if (-not (test-Path -Path "./certificados_EFS/*")) {
-        configuracionEFS
+        configuracinEFS
     }
 
     Set-Location ./verificar_certificado_DRA_del_sistema_EFS
@@ -261,7 +278,6 @@ GetFechaHora
 GetActualizaciones
 GetDireccionIP
 GetTarjetasRed
-GetIPv6
 GetNombreEquipo
 GetUsuarios
 
