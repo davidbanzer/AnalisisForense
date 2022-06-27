@@ -253,6 +253,9 @@ function GetPoliticaContras {
     Write-After ("*****")
 }
 
+
+
+#Configuración del Servidor
 GetZonaHoraria
 GetFechaHora
 GetActualizaciones
@@ -261,19 +264,37 @@ GetTarjetasRed
 GetIPv6
 GetNombreEquipo
 GetUsuarios
+
+
+#Sistema Operativo
+GetSistemaOperativo
+GetVersionSistemaOperativo
+GetUltimoArranque
+GetSistemaArchivos
+GetProgramasInstalados
+#getCertificadoDRASystemEFS
+#servicios
+GetLogSistema
+GetLogError
+GetUnidadesDisco
+GetRecursosCompartidos
+GetSMB1
+GetUSBConectados
+
+
+#Active Directory
 GetDominio
 GetADDController
 GetCategoriasAuditoria
 GetSubcategoriasAuditoria
-GetSistemaArchivos
-#getCertificadoDRASystemEFS
-GetProgramasInstalados
-GetSistemaOperativo
-GetVersionSistemaOperativo
-GetUltimoArranque
-GetLogSistema
-GetLogError
-GetUnidadesDisco
-GetSMB1
-GetUSBConectados
 GetPoliticaContras
+
+
+
+
+
+
+
+
+
+
