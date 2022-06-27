@@ -186,7 +186,6 @@ function GetProgramasInstalados {
     Write-Info "Programas Instalados"
     Write-Before ("*****")
     Get-WmiObject -Class Win32_Product
-     
     Write-After ("*****")
 }
 
@@ -270,7 +269,54 @@ function GetPoliticaContras {
     Write-After ("*****")
 }
 
+function GetServicios {
+    Write-Info "Servicios del Sistema"
+    Write-Before ("*****")
+    Get-Service
+    Write-After ("*****")
+}
 
+function GetServiciosCorriendo {
+    Write-Info "Servicios Corriendo del Sistema"
+    Write-Before ("*****")
+    Get-Service | Where-Object { $_.Status -eq "Running" } 
+    Write-After ("*****")
+}
+
+function GetServiciosDetenidos {
+    Write-Info "Servicios Detenidos del Sistema"
+    Write-Before ("*****")
+    Get-Service | Where-Object { $_.Status -eq "Stopped" } 
+    Write-After ("*****")
+}
+
+function GetSNMP {
+    Write-Info "Estado del servicio SNMP"
+    Write-Before ("*****")
+    Get-WindowsCapability -Online -Name “SNMP*”
+    Write-After ("*****")
+}
+
+function GetCDROM {
+    Write-Info "Comprobar unidad CD/DVD"
+    Write-Before ("*****")
+    (Get-WMIObject -Class Win32_CDROMDrive -Property *).MediaLoaded
+    Write-After ("*****")
+}
+
+function GetProcesos {
+    Write-Info "Procesos"
+    Write-Before ("*****")
+    Get-Process
+    Write-After ("*****")
+}
+
+function Get5Procesos {
+    Write-Info "5 Procesos que utilizan más memoria"
+    Write-Before ("*****")
+    ps | sort –p ws | select –last 5
+    Write-After ("*****")
+}
 
 #Configuración del Servidor
 GetZonaHoraria
@@ -289,14 +335,19 @@ GetUltimoArranque
 GetSistemaArchivos
 GetProgramasInstalados
 #getCertificadoDRASystemEFS
-#servicios
+GetServicios
+GetServiciosCorriendo
+GetServiciosDetenidos
 GetLogSistema
 GetLogError
 GetUnidadesDisco
 GetRecursosCompartidos
 GetSMB1
 GetUSBConectados
-
+GetSNMP
+GetCDROM
+GetProcesos
+Get5Procesos
 
 #Active Directory
 GetDominio
