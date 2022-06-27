@@ -22,9 +22,13 @@ Write-Info "Script escrito y testeado por el grupo 1"
 
 function GetZonaHoraria {
     # Ver zona horaria
+    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Date & Days')) {
+        New-Item -Path './Reportes Auditoria/Auditoria Date & Days' -ItemType Directory
+    }
+    
     Write-Info "Zona Horaria"
     Write-Before ("*****")
-    Get-TimeZone
+    Get-TimeZone | Out-File -FilePath './Reportes Auditoria/Auditoria Date & Days/Config DATE & DAYS.txt'
     Write-After ("*****")
 }
 
@@ -32,23 +36,31 @@ function GetFechaHora {
     # Ver Fecha y Hora
     Write-Info "Fecha y Hora"
     Write-Before ("*****")
-    get-date
+
+    $datetimeToString = (Get-Date -format "yyyy-MM-dd ss:mm:HH").ToString()
+    $datetimeToString | Out-File -Append './Reportes Auditoria/Auditoria Date & Days/Auditoria Date & Days.txt'
     Write-After ("*****")
 }
 
 function GetActualizaciones {
+    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Updates')) {
+        New-Item -Path './Reportes Auditoria/Auditoria Updates' -ItemType Directory
+    }
     # Ver actualizaciones
     Write-Info "Actualizaciones"
     Write-Before ("*****")
-    wmic qfe list 
+    wmic qfe list | Out-File -FilePath './Reportes Auditoria/Auditoria Updates/Auditoria Updates.txt'
     Write-After ("******")
 }
 
 function GetDireccionIP {
+    if (-not (test-Path -Path './Reportes Auditoria/Auditoria Redes & User')) {
+        New-Item -Path './Reportes Auditoria/Auditoria Redes & User' -ItemType Directory
+    }
     # Ver direccion
     Write-Info "Direcciones IP"
     Write-Before ("*****")
-    Get-NetIPAddress | Format-Table
+    Get-NetIPAddress | Format-Table | Out-File -FilePath './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
     Write-After ("*****")
 }
 
@@ -56,7 +68,7 @@ function GetTarjetasRed {
     # Ver adaptadores
     Write-Info "Tarjetas de Red"
     Write-Before ("*****")
-    Get-NetAdapter | Format-Table
+    Get-NetAdapter | Format-Table | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
     Write-After ("*****")
 }
 
@@ -64,7 +76,7 @@ function GetNombreEquipo {
     # Ver nombre equipo
     Write-Info "Nombre del Equipo"
     Write-Before ("*****")
-    hostname 
+    hostname | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
     Write-After ("******")
 }
 
@@ -72,7 +84,7 @@ function GetUsuarios {
     # Ver usuarios
     Write-Info "Usuarios"
     Write-Before ("*****")
-    Get-LocalUser | Format-Table
+    Get-LocalUser | Format-Table | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
     Write-After ("*****")
 }
 
@@ -80,7 +92,7 @@ function GetDominio {
     # Ver dominio
     Write-Info "Dominio"
     Write-Before ("*****")
-    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain
+    Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain | Out-File -Append './Reportes Auditoria/Auditoria Redes & User/Auditoria Redes & User.txt'
     Write-After ("*****")
 
 }
@@ -142,7 +154,8 @@ function GetProgramasInstalados {
     # Ver programas instalados
     Write-Info "Programas Instalados"
     Write-Before ("*****")
-    Get-WmiObject -Class Win32_Product | Select-Object -Property Name 
+    Get-WmiObject -Class Win32_Product
+     
     Write-After ("*****")
 }
 
