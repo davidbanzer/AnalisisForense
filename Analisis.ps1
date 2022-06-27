@@ -254,7 +254,7 @@ function GetLogSistema {
 
 function GetLogError {
     # Ver los últimos 20 logs de error
-    Write-Info "Ultimos 20 Logs de Error"
+    Write-Info "Ultimos 20 Logs de Error."
     Write-Output 'Ultimos 20 Logs de Error' | Out-File -Append $AuditoriaSO/$FileNameSO
     Write-Output '------------' | Out-File -Append $AuditoriaSO/$FileNameSO
     Get-EventLog -LogName System -EntryType Error -Newest 20 | Out-File -Append $AuditoriaSO/$FileNameSO
