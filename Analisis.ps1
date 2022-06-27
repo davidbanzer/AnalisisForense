@@ -18,7 +18,7 @@ Write-Info "Script escrito y testeado por el grupo 1"
 
 function GetZonaHoraria {
     # Ver zona horaria
-    Write-Info "1. a) Zona Horaria"
+    Write-Info "Zona Horaria"
     Write-Before ("*****")
     Get-TimeZone
     Write-After ("*****")
@@ -26,7 +26,7 @@ function GetZonaHoraria {
 
 function GetFechaHora {
     # Ver Fecha y Hora
-    Write-Info "1. a) Fecha y Hora"
+    Write-Info "Fecha y Hora"
     Write-Before ("*****")
     get-date
     Write-After ("*****")
@@ -34,7 +34,7 @@ function GetFechaHora {
 
 function GetActualizaciones {
     # Ver actualizaciones
-    Write-Info "1. b) Actualizaciones"
+    Write-Info "Actualizaciones"
     Write-Before ("*****")
     wmic qfe list
     Write-After ("*****")
@@ -42,7 +42,7 @@ function GetActualizaciones {
 
 function GetDireccionIP {
     # Ver direccion
-    Write-Info "1. c) Direcciones IP"
+    Write-Info "Direcciones IP"
     Write-Before ("*****")
     Get-NetIPAddress | Format-Table
     Write-After ("*****")
@@ -50,7 +50,7 @@ function GetDireccionIP {
 
 function GetTarjetasRed {
     # Ver adaptadores
-    Write-Info "1. c) Tarjetas de Red"
+    Write-Info "Tarjetas de Red"
     Write-Before ("*****")
     Get-NetAdapter | Format-Table
     Write-After ("*****")
@@ -58,7 +58,7 @@ function GetTarjetasRed {
 
 function GetNombreEquipo {
     # Ver nombre equipo
-    Write-Info "1. d) Nombre del Equipo"
+    Write-Info "Nombre del Equipo"
     Write-Before ("*****")
     hostname
     Write-After ("*****")
@@ -66,7 +66,7 @@ function GetNombreEquipo {
 
 function GetUsuarios {
     # Ver usuarios
-    Write-Info "1. d) Usuarios"
+    Write-Info "Usuarios"
     Write-Before ("*****")
     Get-LocalUser | Format-Table
     Write-After ("*****")
@@ -74,7 +74,7 @@ function GetUsuarios {
 
 function GetDominio {
     # Ver dominio
-    Write-Info "1. e) Dominio"
+    Write-Info "Dominio"
     Write-Before ("*****")
     Get-WMIObject Win32_ComputerSystem | Select-Object -ExpandProperty Domain
     Write-After ("*****")
@@ -83,7 +83,7 @@ function GetDominio {
 
 function GetCategoriasAuditoria {
     # Ver categorias de auditoria
-    Write-Info "1. e) Categorias de Auditoria"
+    Write-Info "Categorias de Auditoria"
     Write-Before ("*****")
     auditpol /get /category:*
     Write-After ("*****")
@@ -91,7 +91,7 @@ function GetCategoriasAuditoria {
 
 function GetSubcategoriasAuditoria {
     # Ver subcategorias de auditoria
-    Write-Info "1. e) Subcategorias de Auditoria"
+    Write-Info "Subcategorias de Auditoria"
     Write-Before ("*****")
     auditpol /list /subcategory:*
     Write-After ("*****")
@@ -99,7 +99,7 @@ function GetSubcategoriasAuditoria {
 
 function GetSistemaArchivos {
     # Ver sistema de archivos
-    Write-Info "4. a) Sistema de Archivos"
+    Write-Info "Sistema de Archivos"
     Write-Before ("*****")
     Get-Volume | Format-Table
     Write-After ("*****")
@@ -107,7 +107,7 @@ function GetSistemaArchivos {
 
 function GetProgramasInstalados {
     # Ver programas instalados
-    Write-Info "4. b) Programas Instalados"
+    Write-Info "Programas Instalados"
     Write-Before ("*****")
     Get-WmiObject -Class Win32_Product | Select-Object -Property Name 
     Write-After ("*****")
@@ -115,7 +115,7 @@ function GetProgramasInstalados {
 
 function GetSistemaOperativo {
     # Ver sistema operativo
-    Write-Info "4. c) Sistema Operativo"
+    Write-Info " Operativo"
     Write-Before ("*****")
     (Get-CimInstance -ClassName CIM_OperatingSystem).Caption
     Write-After ("*****")
@@ -123,7 +123,7 @@ function GetSistemaOperativo {
 
 function GetVersionSistemaOperativo {
     # Ver version sistema operativo
-    Write-Info "4. c) Version Sistema Operativo"
+    Write-Info "Version Sistema Operativo"
     Write-Before ("*****")
     (Get-CimInstance -ClassName CIM_OperatingSystem).Version
     Write-After ("*****")
@@ -131,9 +131,17 @@ function GetVersionSistemaOperativo {
 
 function GetUltimoArranque {
     # Ver ultimo arranque
-    Write-Info "4. c) Ultimo Arranque"
+    Write-Info "Ultimo Arranque"
     Write-Before ("*****")
     (Get-CimInstance -ClassName CIM_OperatingSystem).LastBootUpTime
+    Write-After ("*****")
+}
+
+function GetLogSistema {
+    # Ver los últimos 50 logs del sistema
+    Write-Info "Ultimos 50 Logs del Sistema"
+    Write-Before ("*****")
+    Get-EventLog -LogName System -Newest 50
     Write-After ("*****")
 }
 
@@ -152,3 +160,4 @@ GetProgramasInstalados
 GetSistemaOperativo
 GetVersionSistemaOperativo
 GetUltimoArranque
+GetLogSistema
