@@ -102,6 +102,15 @@ function GetDominio {
 
 }
 
+function GetADDController {
+    # Ver la info del controlador de dominio
+    Write-Info "Controlador de Dominio"
+    Write-Before ("*****")
+    Get-AdDomainController
+    Write-After ("*****")
+}
+
+
 function GetCategoriasAuditoria {
     # Ver categorias de auditoria
     Write-Info "Categorias de Auditoria"
@@ -204,6 +213,46 @@ function GetLogError {
     Write-After ("*****")
 }
 
+function GetUnidadesDisco {
+    # Ver las unidades de disco
+    Write-Info "Unidades de Disco"
+    Write-Before ("*****")
+    Get-PSDrive -PSProvider FileSystem
+    Write-After ("*****")
+}
+
+function GetRecursosCompartidos {
+    # Ver los recursos compartidos
+    Write-Info "Recursos Compartidos"
+    Write-Before ("*****")
+    Get-SmbShare
+    Write-After ("*****")
+}
+
+function GetSMB1 {
+    # Comprobar si SMB1 está activo
+    Write-Info "SMB1"
+    Write-Before ("*****")
+    Get-WindowsOptionalFeature –Online –FeatureName SMB1Protocol
+    Write-After ("*****")
+}
+
+function GetUSBConectados {
+    # Comprobar los USB conectados
+    Write-Info "USB conectados"
+    Write-Before ("*****")
+    Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' }
+    Write-After ("*****")
+}
+
+function GetPoliticaContras {
+    # Comprobar la política de contraseñas
+    Write-Info "Política de Contraseñas"
+    Write-Before ("*****")
+    Get-ADDefaultDomainPasswordPolicy
+    Write-After ("*****")
+}
+
 GetZonaHoraria
 GetFechaHora
 GetActualizaciones
@@ -213,6 +262,7 @@ GetIPv6
 GetNombreEquipo
 GetUsuarios
 GetDominio
+GetADDController
 GetCategoriasAuditoria
 GetSubcategoriasAuditoria
 GetSistemaArchivos
@@ -223,3 +273,7 @@ GetVersionSistemaOperativo
 GetUltimoArranque
 GetLogSistema
 GetLogError
+GetUnidadesDisco
+GetSMB1
+GetUSBConectados
+GetPoliticaContras
