@@ -128,20 +128,30 @@ function GetDominio {
     Write-After ("TXT de " + $FileNameRedesUsuarios + "  Actualizado.")
 }
 
+$AuditoriaAudipolPath = "./Reportes Auditoria/Auditoria con Audipol"
+$FileNameAuditoriaAudipol = "Auditoria con Audipol.txt"
 function GetCategoriasAuditoria {
+    if (-not (test-Path -Path $AuditoriaAudipolPath)) {
+        New-Item -Path $AuditoriaAudipolPath -ItemType Directory
+    }
     # Ver categorias de auditoria
     Write-Info "Categorias de Auditoria"
-    Write-Before ("*****")
-    auditpol /get /category:* 
-    Write-After ("******")
+    Write-Output 'Categorias de Auditoria' | Out-File -FilePath $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
+    Write-Output '------------' | Out-File -Append $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
+    auditpol /get /category:* | Out-File -Append $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
+    Write-Output '-------------------------------------------------------' | Out-File -Append $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
+    Write-After ("TXT de " + $FileNameAuditoriaAudipol + "  Generado.")
 }
 
 function GetSubcategoriasAuditoria {
     # Ver subcategorias de auditoria
     Write-Info "Subcategorias de Auditoria"
-    Write-Before ("*****")
+    Write-Output 'Subcategorias de Auditoria' | Out-File -Append $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
+    Write-Output '------------' | Out-File -Append $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
+    auditpol /get /category:* | Out-File -Append $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
     auditpol /list /subcategory:* 
-    Write-After ("******")
+    Write-Output '-------------------------------------------------------' | Out-File -Append $AuditoriaAudipolPath/$FileNameAuditoriaAudipol
+    Write-After ("TXT de " + $FileNameAuditoriaAudipol + "  Actualizado.")
 }
 
 function GetSistemaArchivos {
