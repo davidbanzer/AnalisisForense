@@ -261,15 +261,6 @@ function GetLogError {
     Write-After ("TXT de " + $FileNameSA + " Actualizado.")
 }
 
-function GetUnidadesDisco {
-    # Ver las unidades de disco
-    Write-Info "Unidades de Disco"
-    Write-Before ("*****")
-    Get-PSDrive -PSProvider FileSystem
-    Write-After ("*****")
-}
-
-
 $RCPPath = "./Reportes Auditoria/Auditoria recursos Compartidos & Protocolos"
 $FileNameRCP = "Auditoria recursos Compartidos & Protocolos.txt"
 function GetRecursosCompartidos {
@@ -295,6 +286,14 @@ function GetSMB1 {
     Write-After ("TXT de " + $FileNameRCP + " Actualizado.")
 }
 
+function GetUnidadesDisco {
+    # Ver las unidades de disco
+    Write-Info "Unidades de Disco"
+    Write-Before ("*****")
+    Get-PSDrive -PSProvider FileSystem
+    Write-After ("*****")
+}
+
 function GetUSBConectados {
     # Comprobar los USB conectados
     Write-Info "USB conectados"
@@ -311,7 +310,110 @@ function GetPoliticaContras {
     Write-After ("*****")
 }
 
+function GetServicios {
+    Write-Info "Servicios del Sistema"
+    Write-Before ("*****")
+    Get-Service
+    Write-After ("*****")
+}
 
+function GetServiciosCorriendo {
+    Write-Info "Servicios Corriendo del Sistema"
+    Write-Before ("*****")
+    Get-Service | Where-Object { $_.Status -eq "Running" } 
+    Write-After ("*****")
+}
+
+function GetServiciosDetenidos {
+    Write-Info "Servicios Detenidos del Sistema"
+    Write-Before ("*****")
+    Get-Service | Where-Object { $_.Status -eq "Stopped" } 
+    Write-After ("*****")
+}
+
+function GetSNMP {
+    Write-Info "Estado del servicio SNMP"
+    Write-Before ("*****")
+    Get-WindowsCapability -Online -Name “SNMP*”
+    Write-After ("*****")
+}
+
+function GetCDROM {
+    Write-Info "Comprobar unidad CD/DVD"
+    Write-Before ("*****")
+    (Get-WMIObject -Class Win32_CDROMDrive -Property *).MediaLoaded
+    Write-After ("*****")
+}
+
+function GetProcesos {
+    Write-Info "Procesos"
+    Write-Before ("*****")
+    Get-Process
+    Write-After ("*****")
+}
+
+function Get5Procesos {
+    Write-Info "5 Procesos que utilizan más memoria"
+    Write-Before ("*****")
+    ps | sort –p ws | select –last 5
+    Write-After ("*****")
+}
+
+function GetUsuariosAD {
+    Write-Info "Usuarios creados dentro de Active Directory"
+    Write-Before ("*****")
+    Get-ADUser -Filter * -Properties whencreated
+    Write-After ("*****")
+}
+
+function GetUsuariosHabilitados {
+    Write-Info "Usuarios de Active Directory que se encuentran habilitados"
+    Write-Before ("*****")
+    Get-ADUser -Filter * | Ft Name, Enabled
+    Write-After ("*****")
+}
+
+function GetUsuariosDeshabilitados {
+    Write-Info "Usuarios de Active Directory que se encuentran deshabilitados"
+    Write-Before ("*****")
+    Search-ADAccount -AccountDisabled | select name
+    Write-After ("*****")
+}
+
+function GetUsuariosContras {
+    Write-Info "Usuarios de Active Directory cuya contraseña no expira nunca"
+    Write-Before ("*****")
+    Get-ADUser -Filter * -Properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "true" } | Select-Object DistinguishedName, Name, Enabled
+    Write-After ("*****")
+}
+
+function GetUltimaConexionUsuario {
+    Write-Info "Última conexión al servidor de un usuario específico"
+    Write-Before ("*****")
+    Get-ADUser -Identity “nombredeusuario” -Properties “LastLogonDate”
+    Write-After ("*****")
+}
+
+function GetEquiposConectadosDominio {
+    Write-Info "Equipos conectados al dominio"
+    Write-Before ("*****")
+    Get-ADComputer -Filter *
+    Write-After ("*****")
+}
+
+function GetContadorEquiposDominio {
+    Write-Info "Contador de equipos conectados al dominio"
+    Write-Before ("*****")
+    Get-ADComputer -Filter * | measure
+    Write-After ("*****")
+}
+
+function GetSOEquiposConectadosDominio {
+    Write-Info "Sistemas Operativos de los equipos conectados al dominio"
+    Write-Before ("*****")
+    Get-ADComputer -Filter "name -like '*'" -Properties operatingSystem | group -Property operatingSystem | Select Name, Count
+    Write-After ("*****")
+}
 
 #Configuración del Servidor
 GetZonaHoraria
@@ -330,14 +432,19 @@ GetUltimoArranque
 GetSistemaArchivos
 GetProgramasInstalados
 #getCertificadoDRASystemEFS
-#servicios
+GetServicios
+GetServiciosCorriendo
+GetServiciosDetenidos
 GetLogSistema
 GetLogError
 GetUnidadesDisco
 GetRecursosCompartidos
 GetSMB1
 GetUSBConectados
-
+GetSNMP
+GetCDROM
+GetProcesos
+Get5Procesos
 
 #Active Directory
 GetDominio
@@ -345,13 +452,11 @@ GetADDController
 GetCategoriasAuditoria
 GetSubcategoriasAuditoria
 GetPoliticaContras
-
-
-
-
-
-
-
-
-
-
+GetUsuariosAD
+GetUsuariosHabilitados
+GetUsuariosDeshabilitados
+GetUsuariosContras
+GetUltimaConexionUsuario
+GetEquiposConectadosDominio
+GetContadorEquiposDominio
+GetSOEquiposConectadosDominio
