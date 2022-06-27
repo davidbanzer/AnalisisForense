@@ -171,10 +171,18 @@ function GetUltimoArranque {
 }
 
 function GetLogSistema {
-    # Ver los últimos 50 logs del sistema
-    Write-Info "Ultimos 50 Logs del Sistema"
+    # Ver los últimos 20 logs del sistema
+    Write-Info "Ultimos 20 Logs del Sistema"
     Write-Before ("*****")
-    Get-EventLog -LogName System -Newest 50
+    Get-EventLog -LogName System -Newest 20
+    Write-After ("*****")
+}
+
+function GetLogError {
+    # Ver los últimos 20 logs de error
+    Write-Info "Ultimos 20 Logs de Error"
+    Write-Before ("*****")
+    Get-EventLog -LogName System -EntryType Error -Newest 20
     Write-After ("*****")
 }
 
@@ -195,3 +203,4 @@ GetSistemaOperativo
 GetVersionSistemaOperativo
 GetUltimoArranque
 GetLogSistema
+GetLogError
