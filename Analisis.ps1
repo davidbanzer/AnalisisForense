@@ -240,6 +240,49 @@ function GetLogError {
     Write-After ("*****")
 }
 
+function GetUnidadesDisco {
+    # Ver las unidades de disco
+    Write-Info "Unidades de Disco"
+    Write-Before ("*****")
+    Get-PSDrive -PSProvider FileSystem
+    Write-After ("*****")
+}
+
+function GetRecursosCompartidos {
+    # Ver los recursos compartidos
+    Write-Info "Recursos Compartidos"
+    Write-Before ("*****")
+    Get-SmbShare
+    Write-After ("*****")
+}
+
+function GetSMB1 {
+    # Comprobar si SMB1 está activo
+    Write-Info "SMB1"
+    Write-Before ("*****")
+    Get-WindowsOptionalFeature –Online –FeatureName SMB1Protocol
+    Write-After ("*****")
+}
+
+function GetUSBConectados {
+    # Comprobar los USB conectados
+    Write-Info "USB conectados"
+    Write-Before ("*****")
+    Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match '^USB' }
+    Write-After ("*****")
+}
+
+function GetPoliticaContras {
+    # Comprobar la política de contraseñas
+    Write-Info "Política de Contraseñas"
+    Write-Before ("*****")
+    Get-ADDefaultDomainPasswordPolicy
+    Write-After ("*****")
+}
+
+
+
+#Configuración del Servidor
 GetZonaHoraria
 GetFechaHora
 GetActualizaciones
@@ -247,14 +290,37 @@ GetDireccionIP
 GetTarjetasRed
 GetNombreEquipo
 GetUsuarios
-GetDominio
-GetCategoriasAuditoria
-GetSubcategoriasAuditoria
-GetSistemaArchivos
-#getCertificadoDRASystemEFS
-GetProgramasInstalados
+
+
+#Sistema Operativo
 GetSistemaOperativo
 GetVersionSistemaOperativo
 GetUltimoArranque
+GetSistemaArchivos
+GetProgramasInstalados
+#getCertificadoDRASystemEFS
+#servicios
 GetLogSistema
 GetLogError
+GetUnidadesDisco
+GetRecursosCompartidos
+GetSMB1
+GetUSBConectados
+
+
+#Active Directory
+GetDominio
+GetADDController
+GetCategoriasAuditoria
+GetSubcategoriasAuditoria
+GetPoliticaContras
+
+
+
+
+
+
+
+
+
+
