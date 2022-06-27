@@ -318,6 +318,62 @@ function Get5Procesos {
     Write-After ("*****")
 }
 
+function GetUsuariosAD {
+    Write-Info "Usuarios creados dentro de Active Directory"
+    Write-Before ("*****")
+    Get-ADUser -Filter * -Properties whencreated
+    Write-After ("*****")
+}
+
+function GetUsuariosHabilitados {
+    Write-Info "Usuarios de Active Directory que se encuentran habilitados"
+    Write-Before ("*****")
+    Get-ADUser -Filter * | Ft Name, Enabled
+    Write-After ("*****")
+}
+
+function GetUsuariosDeshabilitados {
+    Write-Info "Usuarios de Active Directory que se encuentran deshabilitados"
+    Write-Before ("*****")
+    Search-ADAccount -AccountDisabled | select name
+    Write-After ("*****")
+}
+
+function GetUsuariosContras {
+    Write-Info "Usuarios de Active Directory cuya contraseña no expira nunca"
+    Write-Before ("*****")
+    Get-ADUser -Filter * -Properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "true" } | Select-Object DistinguishedName, Name, Enabled
+    Write-After ("*****")
+}
+
+function GetUltimaConexionUsuario {
+    Write-Info "Última conexión al servidor de un usuario específico"
+    Write-Before ("*****")
+    Get-ADUser -Identity “nombredeusuario” -Properties “LastLogonDate”
+    Write-After ("*****")
+}
+
+function GetEquiposConectadosDominio {
+    Write-Info "Equipos conectados al dominio"
+    Write-Before ("*****")
+    Get-ADComputer -Filter *
+    Write-After ("*****")
+}
+
+function GetContadorEquiposDominio {
+    Write-Info "Contador de equipos conectados al dominio"
+    Write-Before ("*****")
+    Get-ADComputer -Filter * | measure
+    Write-After ("*****")
+}
+
+function GetSOEquiposConectadosDominio {
+    Write-Info "Sistemas Operativos de los equipos conectados al dominio"
+    Write-Before ("*****")
+    Get-ADComputer -Filter "name -like '*'" -Properties operatingSystem | group -Property operatingSystem | Select Name, Count
+    Write-After ("*****")
+}
+
 #Configuración del Servidor
 GetZonaHoraria
 GetFechaHora
@@ -355,13 +411,11 @@ GetADDController
 GetCategoriasAuditoria
 GetSubcategoriasAuditoria
 GetPoliticaContras
-
-
-
-
-
-
-
-
-
-
+GetUsuariosAD
+GetUsuariosHabilitados
+GetUsuariosDeshabilitados
+GetUsuariosContras
+GetUltimaConexionUsuario
+GetEquiposConectadosDominio
+GetContadorEquiposDominio
+GetSOEquiposConectadosDominio
