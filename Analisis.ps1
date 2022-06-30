@@ -111,8 +111,8 @@ function GetIPv6 {
 function GetSNMP {
     # [X] exportado a TXT
     # Ver protocolo SNMP
-    Write-Info ". Protocolo SNMP"
-    Write-Output '. Protocolo SNMP' | Out-File -FilePath $SistemaOperativoPath/$FileNameRed
+    Write-Info "24. Protocolo SNMP"
+    Write-Output '24. Protocolo SNMP' | Out-File -FilePath $SistemaOperativoPath/$FileNameRed
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameRed
     Get-WindowsCapability -Online -Name “SNMP*” | Out-File -Append $SistemaOperativoPath/$FileNameRed
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameRed
@@ -263,27 +263,46 @@ function GetServiciosDetenidos {
 
 
 $FileNameLog = "Logs.txt"
-function GetLogWarning {
+function GetLogsAdvertencias {
     # [X] exportado a TXT
-    # Ver logs de warning en un rango de fechas
+    # Ver logs de advertencia
     Write-Info "18. Logs de Warning"
-    $Begin = Get-Date -Date '6/01/2022 00:00:00'
-    $End = Get-Date -Date '6/30/2022 00:00:00'
     Write-Output '18. Logs del Sistema' | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
-    Get-EventLog -LogName System -EntryType Warning -After $Begin -Before $End | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Get-EventLog -LogName System -EntryType Warning | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-After ("TXT de " + $FileNameLog + " Actualizado.")
 }
 
-function GetLogError {
-    # Ver los últimos 20 logs de error
+function GetLogsErrores {
+    # [X] exportado a TXT
+    # Ver los logs de errores
     Write-Info "19. Logs de Error"
-    $Begin = Get-Date -Date '6/01/2022 00:00:00'
-    $End = Get-Date -Date '6/30/2022 00:00:00'
     Write-Output '19. Logs de Error' | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
-    Get-EventLog -LogName System -EntryType Error -After $Begin -Before $End  | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Get-EventLog -LogName System -EntryType Error | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-After ("TXT de " + $FileNameLog + " Actualizado.")
+}
+
+function GetLogsActualizaciones {
+    # [X] exportado a TXT
+    # Ver logs de Windows Update
+    Write-Info ". Logs de Actualizaciones"
+    Write-Output '. Logs de Actualizaciones' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Get-WinEvent -ProviderName  Microsoft-Windows-WindowsUpdateClient | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-After ("TXT de " + $FileNameLog + " Actualizado.")
+}
+
+function GetLogsAplicaciones {
+    # [X] exportado a TXT
+    # Ver logs de aplicaciones
+    Write-Info ". Logs de Aplicaciones"
+    Write-Output '. Logs de Aplicaciones' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Get-Eventlog -Logname application | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-After ("TXT de " + $FileNameLog + " Actualizado.")
 }
@@ -562,8 +581,10 @@ GetProgramasInstalados
 GetServicios
 GetServiciosCorriendo
 GetServiciosDetenidos
-GetLogWarning
-GetLogError
+GetLogsAdvertencias
+GetLogsErrores
+GetLogsActualizaciones #Agregar al documento
+GetLogsAplicaciones #Agregar al documento
 GetUnidadesDisco
 GetRecursosCompartidos
 GetSMB1
