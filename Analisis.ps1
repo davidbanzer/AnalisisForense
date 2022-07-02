@@ -112,10 +112,10 @@ function GetSNMP {
     # [X] exportado a TXT
     # Ver protocolo SNMP
     Write-Info "24. Protocolo SNMP"
-    Write-Output '24. Protocolo SNMP' | Out-File -FilePath $SistemaOperativoPath/$FileNameRed
-    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameRed
-    Get-WindowsCapability -Online -Name “SNMP*” | Out-File -Append $SistemaOperativoPath/$FileNameRed
-    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameRed
+    Write-Output '24. Protocolo SNMP' | Out-File -Append $ServidorLocalPath/$FileNameRed
+    Write-Output '-------------------------------------------------------' | Out-File -Append $ServidorLocalPath/$FileNameRed
+    Get-WindowsCapability -Online -Name “SNMP*” | Out-File -Append $ServidorLocalPath/$FileNameRed
+    Write-Output '-------------------------------------------------------' | Out-File -Append $ServidorLocalPath/$FileNameRed
     Write-After ("TXT de " + $FileNameRed + " Actualizado.")
 }
 
