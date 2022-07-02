@@ -19,6 +19,7 @@ Write-Info "Script escrito y testeado por el grupo 1"
 $ServidorLocalPath = "./Reportes Auditoria/1) Servidor Local"
 $SistemaOperativoPath = "./Reportes Auditoria/2) Sistema Operativo"
 $ActiveDirectoryPath = "./Reportes Auditoria/3) Active Directory"
+$Raiz = "./Reportes Auditoria"
 
 if (-not (test-Path -Path $ServidorLocalPath)) {
     New-Item -Path $ServidorLocalPath -ItemType Directory
@@ -442,6 +443,20 @@ function GetTareasProgramadas {
     Write-After ("TXT de " + $FileNameTareas + " Actualizado.")
 }
 
+$FileNamePuertos = "Puertos.txt"
+
+function GetPuertos {
+    # [X] exportado a TXT
+    # Ver puertos del sistema
+    Write-Info ". Puertos del Sistema"
+    Write-Output '. Puertos del Sistema' | Out-File -FilePath $SistemaOperativoPath/$FileNamePuertos
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNamePuertos
+    Get-NetTCPConnection -State Listen  | Out-File -Append $SistemaOperativoPath/$FileNamePuertos
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNamePuertos
+    Write-After ("TXT de " + $FileNamePuertos + " Actualizado.")
+
+}
+
 $FileNameDominioAD = "Informacion Dominio y AD.txt"
 function GetDominio {
     # [X] exportado a TXT 
@@ -597,6 +612,12 @@ function GetSOEquiposConectadosDominio {
 }
 
 
+function ReporteBateria {
+    Write-Info "Reporte de Bateria"
+    powercfg /energy /output "./Reportes Auditoria/1) Servidor Local/Reporte Bateria.html" /duration 10
+    
+}
+
 #Configuración del Servidor
 GetZonaHoraria
 GetFechaHora
@@ -625,7 +646,7 @@ GetLogsErrores
 GetLogsActualizaciones 
 GetLogsAplicaciones 
 GetLogsSeguridad
-GetLogsProgramasDesinstalados # Agregar al doc
+GetLogsProgramasDesinstalados 
 GetUnidadesDisco
 GetRecursosCompartidos
 GetSMB1
@@ -634,7 +655,7 @@ GetCDROM
 GetProcesos
 Get5Procesos
 GetTareasProgramadas
-
+GetPuertos
 
 #Active Directory
 GetDominio
@@ -651,3 +672,6 @@ GetUltimaConexionUsuario Administrador
 GetEquiposConectadosDominio
 GetContadorEquiposDominio
 GetSOEquiposConectadosDominio
+
+
+ReporteBateria
