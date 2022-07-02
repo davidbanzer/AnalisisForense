@@ -215,7 +215,7 @@ function getCertificadoDRASystemEFS {
     Set-Location ..
 }
 
-$FileNameProgramas = "Programas Instalados.txt"
+$FileNameProgramas = "Programas.txt"
 function GetProgramasInstalados {
     # [X] exportado a TXT
     # Ver programas instalados
@@ -227,6 +227,20 @@ function GetProgramasInstalados {
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameProgramas
     Write-After ("TXT de " + $FileNameProgramas + " Actualizado.")
 }
+
+function GetProgramasInicio {
+    # [X] exportado a TXT
+    # Ver programas que se ejecutan al iniciar Windows
+
+    Write-Info ". Programas que se Ejecutan al Iniciar Windows"
+    Write-Output '. Programas que se Ejecutan al Iniciar Windows' | Out-File -FilePath $SistemaOperativoPath/$FileNameProgramas
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameProgramas
+    wmic startup | Out-File -Append $SistemaOperativoPath/$FileNameProgramas
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameProgramas
+    Write-After ("TXT de " + $FileNameProgramas + " Actualizado.")
+}
+
+
 $FileNameServicios = "Servicios.txt"
 function GetServicios {
     # [X] exportado a TXT
@@ -267,7 +281,7 @@ function GetLogsAdvertencias {
     # [X] exportado a TXT
     # Ver logs de advertencia
     Write-Info "18. Logs de Warning"
-    Write-Output '18. Logs del Sistema' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '18. Logs de Warning' | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Get-EventLog -LogName System -EntryType Warning | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
@@ -305,6 +319,31 @@ function GetLogsAplicaciones {
     Get-Eventlog -Logname application | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
     Write-After ("TXT de " + $FileNameLog + " Actualizado.")
+}
+
+function GetLogsSeguridad {
+    # [X] exportado a TXT
+    # Ver logs de seguridad
+    Write-Info ". Logs de Seguridad"
+    Write-Output '. Logs de Seguridad' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Get-Eventlog security | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-After ("TXT de " + $FileNameLog + " Actualizado.")
+}
+
+function GetLogsProgramasDesinstalados{
+    # [X] exportado a TXT
+    # Ver logs de programas desinstalados
+
+    Write-Info ". Logs de Programas Desinstalados"
+    Write-Output '. Logs de Programas Desinstalados' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Get-EventLog -LogName Application -Source MSIInstaller | Where-Object {$_.EventID -eq '1034'} | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameLog
+    Write-After ("TXT de " + $FileNameLog + " Actualizado.")
+
+    
 }
 
 $FileNameUnidadesDisco = "Unidades de Disco.txt"
@@ -501,22 +540,21 @@ function GetUsuariosContras {
     # [X] exportado a TXT 
     # Ver la lista de usuarios de AD cuya contraseña no expira
 
-    Write-Info "37. Usuarios de AD Cuya Contraseña no Expira"
-    Write-Output '37. Usuarios de AD Cuya Contraseña no Expira' | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
+    Write-Info "37. Usuarios de AD Cuya Contra no Expira"
+    Write-Output '37. Usuarios de AD Cuya Contra no Expira' | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
     Write-Output '-------------------------------------------------------' | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
     Get-ADUser -Filter * -Properties Name, PasswordNeverExpires | where { $_.passwordNeverExpires -eq "true" } | Select-Object DistinguishedName, Name, Enabled | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
     Write-Output '-------------------------------------------------------' | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
     Write-After ("TXT de " + $FileNameUsuariosAD + " Actualizado.")
 }
 
-function GetUltimaConexionUsuario {
+function GetUltimaConexionUsuario($User) {
     # [X] exportado a TXT 
     # última conexión de un usuario en específico
-    $UsuarioAD = Get-ADUser
     Write-Info "38. Ultima conexion del Usuario de AD"
     Write-Output '38. Ultima conexion del Usuario de AD' | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
     Write-Output '-------------------------------------------------------' | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
-    Get-ADUser -Identity $UsuarioAD -Properties “LastLogonDate” | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
+    Get-ADUser -Identity $User -Properties "LastLogonDate" | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
     Write-Output '-------------------------------------------------------' | Out-File -Append $ActiveDirectoryPath/$FileNameUsuariosAD
     Write-After ("TXT de " + $FileNameUsuariosAD + " Actualizado.")
 
@@ -577,14 +615,17 @@ GetVersionSistemaOperativo
 GetUltimoArranque
 GetSistemaArchivos
 GetProgramasInstalados
+GetProgramasInicio
 #getCertificadoDRASystemEFS
 GetServicios
 GetServiciosCorriendo
 GetServiciosDetenidos
 GetLogsAdvertencias
 GetLogsErrores
-GetLogsActualizaciones #Agregar al documento
-GetLogsAplicaciones #Agregar al documento
+GetLogsActualizaciones 
+GetLogsAplicaciones 
+GetLogsSeguridad
+GetLogsProgramasDesinstalados # Agregar al doc
 GetUnidadesDisco
 GetRecursosCompartidos
 GetSMB1
@@ -605,7 +646,8 @@ GetUsuariosAD
 GetUsuariosHabilitados
 GetUsuariosDeshabilitados
 GetUsuariosContras
-# GetUltimaConexionUsuario
+#Especificar usuario como parámetro
+GetUltimaConexionUsuario Administrador
 GetEquiposConectadosDominio
 GetContadorEquiposDominio
 GetSOEquiposConectadosDominio
