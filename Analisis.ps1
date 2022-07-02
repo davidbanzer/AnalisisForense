@@ -356,7 +356,7 @@ function GetUSBConectados {
     Write-After ("TXT de " + $FileNameUSB + " Actualizado.")
 }
 
-$FileNameCDROM = "Unidad CD/DVD.txt"
+$FileNameCDROM = "Unidad CD-DVD.txt"
 function GetCDROM {
     # [X] exportado a TXT
     # Comprobar unidad CD/DVD
@@ -375,18 +375,18 @@ function GetProcesos {
     Write-Info "26. Lista de Procesos"
     Write-Output '26. Lista de Procesos' | Out-File -FilePath $SistemaOperativoPath/$FileNameProcesos
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
-    Get-Process | Out-File -Append $SistemaOperativoPath/$FileNameProcesos | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
+    Get-Process  | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
     Write-After ("TXT de " + $FileNameProcesos + " Actualizado.")
-}
+}   
 
 function Get5Procesos {
     # [X] exportado a TXT
     # Lista de 5 procesos que ocupan más memoria
     Write-Info "27. 5 Procesos que Ocupan mas Memoria"
-    Write-Output '27. 5 Procesos que Ocupan mas Memoria' | Out-File -FilePath $SistemaOperativoPath/$FileNameProcesos
+    Write-Output '27. 5 Procesos que Ocupan mas Memoria' | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
-    ps | sort -p ws | select -last 5 | Out-File -Append $SistemaOperativoPath/$FileNameProcesos | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
+    ps | sort -p ws | select -last 5  | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameProcesos
     Write-After ("TXT de " + $FileNameProcesos + " Actualizado.")
 }
@@ -398,7 +398,7 @@ function GetTareasProgramadas {
     Write-Info "28. Tareas Programadas"
     Write-Output '28. Tareas Programadas' | Out-File -FilePath $SistemaOperativoPath/$FileNameTareas
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameTareas
-    Get-Scheduled | Out-File -Append $SistemaOperativoPath/$FileNameTareas | Out-File -Append $SistemaOperativoPath/$FileNameTareas
+    Get-ScheduledTask  | Out-File -Append $SistemaOperativoPath/$FileNameTareas
     Write-Output '-------------------------------------------------------' | Out-File -Append $SistemaOperativoPath/$FileNameTareas
     Write-After ("TXT de " + $FileNameTareas + " Actualizado.")
 }
@@ -605,7 +605,7 @@ GetUsuariosAD
 GetUsuariosHabilitados
 GetUsuariosDeshabilitados
 GetUsuariosContras
-GetUltimaConexionUsuario
+# GetUltimaConexionUsuario
 GetEquiposConectadosDominio
 GetContadorEquiposDominio
 GetSOEquiposConectadosDominio
